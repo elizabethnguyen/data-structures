@@ -20,24 +20,68 @@ struct node {
 };
 
 void
-add_node (struct SinglyLinkedList *list, void *newvalue)
+add_tail (struct SinglyLinkedList *list, void *newvalue)
 {
-  if (list->head == 0) {
+  if (list->head == NULL) {
     struct node *root;
     root = (struct node *) malloc(sizeof(struct node));
+
+    if (root == NULL) {
+      perror("add_tail");
+      exit(errno);
+    }
+
     root->value = newvalue;
     root->next = 0;
     list->head = root;
     list->size++;
   } else {
-    node = list->head;
-    while (node->next != 0) {
+    struct node *node = list->head;
+    while (node->next != NULL) {
       node = node->next;
     }
     tail = (struct node *) malloc(sizeof(struct node));
+
+    if (tail == NULL) {
+      perror("add_tail");
+      exit(errno);
+    }
+
     tail->value = newvalue;
     tail->next = 0;
     node->next = tail;
+    list->size++;
+  }
+}
+
+void
+add_head (struct SinglyLinkedList *list, void *newvalue)
+{
+  if (list->head == NULL) {
+    struct node *root;
+    root = (struct node *) malloc(sizeof(struct node));
+
+    if (root == NULL) {
+      perror("add_head");
+      exit(errno);
+    }
+
+    root->value = newvalue;
+    root->next = 0;
+    list->head = root;
+    list->size++;
+  } else {
+    struct node *head;
+    head = (struct node *) malloc(sizeof(struct node));
+
+    if (head == NULL) {
+      perror("add_head");
+      exit(errno);
+    }
+
+    head->value = newvalue;
+    head->next = list->head;
+    list->head = head;
     list->size++;
   }
 }
