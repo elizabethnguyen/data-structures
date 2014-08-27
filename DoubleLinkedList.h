@@ -19,9 +19,6 @@ struct dlNode
 };
 
 void initDL (struct DoublyLinkedList *list);
-
 int dlAddFirst (struct DoublyLinkedList *list, void *newValue);
-
 int dlAddLast (struct DoublyLinkedList *list, void *newValue);
-
 void dlDelete (struct DoublyLinkedList *list, struct dlNode *node);

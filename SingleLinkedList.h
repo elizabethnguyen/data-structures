@@ -15,9 +15,7 @@ struct slNode {
 };
 
 void initSL (struct SinglyLinkedList *list);
-
 int slAddFirst (struct SinglyLinkedList *list, void *newValue);
-
 int slAddLast (struct SinglyLinkedList *list, void *newValue);
-
 void slDelete (struct SinglyLinkedList *list, struct slNode *node);
+struct slNode *compareTo (struct SinglyLinkedList *list, int(*compareFunc)(const void *, const void *));
