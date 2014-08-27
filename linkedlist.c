@@ -2,11 +2,14 @@
 /* linkedlist.c 
    Elizabeth Nguyen */
 
+#include <stdio.h>
+
 /* SinglyLinkedList: container for node 
    UNIDIRECTIONAL linked list: will store the head of the list
    also stores the size (0 initially).
    node: stores a void pointer for arbitrary values as well as
    a pointer to the next node (0 for end) */
+
 
 struct SinglyLinkedList {
   struct node *head;
@@ -19,7 +22,7 @@ struct node {
   struct node *next;
 };
 
-void
+int
 add_tail (struct SinglyLinkedList *list, void *newvalue)
 {
   if (list->head == NULL) {
@@ -27,8 +30,7 @@ add_tail (struct SinglyLinkedList *list, void *newvalue)
     root = (struct node *) malloc(sizeof(struct node));
 
     if (root == NULL) {
-      perror("add_tail");
-      exit(errno);
+      return ENOMEM;
     }
 
     root->value = newvalue;
@@ -43,8 +45,7 @@ add_tail (struct SinglyLinkedList *list, void *newvalue)
     tail = (struct node *) malloc(sizeof(struct node));
 
     if (tail == NULL) {
-      perror("add_tail");
-      exit(errno);
+      return ENOMEM;
     }
 
     tail->value = newvalue;
@@ -52,9 +53,12 @@ add_tail (struct SinglyLinkedList *list, void *newvalue)
     node->next = tail;
     list->size++;
   }
+
+  return 0;
+
 }
 
-void
+int
 add_head (struct SinglyLinkedList *list, void *newvalue)
 {
   if (list->head == NULL) {
@@ -62,8 +66,7 @@ add_head (struct SinglyLinkedList *list, void *newvalue)
     root = (struct node *) malloc(sizeof(struct node));
 
     if (root == NULL) {
-      perror("add_head");
-      exit(errno);
+      return ENOMEM;
     }
 
     root->value = newvalue;
@@ -75,8 +78,7 @@ add_head (struct SinglyLinkedList *list, void *newvalue)
     head = (struct node *) malloc(sizeof(struct node));
 
     if (head == NULL) {
-      perror("add_head");
-      exit(errno);
+      return ENOMEM;
     }
 
     head->value = newvalue;
@@ -84,6 +86,9 @@ add_head (struct SinglyLinkedList *list, void *newvalue)
     list->head = head;
     list->size++;
   }
+
+  return 0;
+
 }
 
 void
