@@ -2,7 +2,7 @@
 /* linkedlist.c 
    Elizabeth Nguyen */
 
-#include <stdio.h>
+#define NO_MEM = 12;
 
 /* SinglyLinkedList: container for node 
    UNIDIRECTIONAL linked list: will store the head of the list
@@ -26,30 +26,33 @@ int
 add_tail (struct SinglyLinkedList *list, void *newvalue)
 {
   if (list->head == NULL) {
-    struct node *root;
-    root = (struct node *) malloc(sizeof(struct node));
+    struct node *head;
+    head = (struct node *) malloc(sizeof(struct node));
 
-    if (root == NULL) {
-      return ENOMEM;
+    if (head == NULL) {
+      return NO_MEM;
     }
 
-    root->value = newvalue;
-    root->next = 0;
-    list->head = root;
+    head->value = newvalue;
+    head->next = NULL;
+    list->head = head;
     list->size++;
   } else {
     struct node *node = list->head;
+    
     while (node->next != NULL) {
       node = node->next;
     }
+
+    struct node *tail;
     tail = (struct node *) malloc(sizeof(struct node));
 
     if (tail == NULL) {
-      return ENOMEM;
+      return NO_MEM;
     }
 
     tail->value = newvalue;
-    tail->next = 0;
+    tail->next = NULL;
     node->next = tail;
     list->size++;
   }
@@ -66,11 +69,11 @@ add_head (struct SinglyLinkedList *list, void *newvalue)
     root = (struct node *) malloc(sizeof(struct node));
 
     if (root == NULL) {
-      return ENOMEM;
+      return NO_MEM;
     }
 
     root->value = newvalue;
-    root->next = 0;
+    root->next =NULL;
     list->head = root;
     list->size++;
   } else {
@@ -78,7 +81,7 @@ add_head (struct SinglyLinkedList *list, void *newvalue)
     head = (struct node *) malloc(sizeof(struct node));
 
     if (head == NULL) {
-      return ENOMEM;
+      return NO_MEM;
     }
 
     head->value = newvalue;
@@ -110,8 +113,8 @@ delete_node (struct SinglyLinkedList *list, struct node *node)
       node = node->next;
     }
     nodeToRemove = node->next;
-    if (nodeToRemove->next == 0) {
-      node->next = 0;
+    if (nodeToRemove->next == NULL) {
+      node->next = NULL;
     } else {
       node->next = nodeToRemove->next;
     }    
@@ -122,6 +125,7 @@ delete_node (struct SinglyLinkedList *list, struct node *node)
   return;
 }
 
+/* No idea what to do for this ... */
 struct node *
 compareTo (struct SinglyLinkedList *list, int(*compareFunc)(const void *, const void *)) {
 }
@@ -134,9 +138,92 @@ struct DoublyLinkedList
   int size = 0;
 };
 
-struct doublynode
+struct node
 {
   void * value;
   struct node *prev;
   struct node *next;
 };
+
+int
+add_tail (struct DoublyLinkedList *list, void *newvalue) 
+{
+  if (list->head == NULL) {
+    struct node *head;
+    head = (struct node *) malloc(sizeof(struct node));
+
+    if (head == NULL) {
+      return NO_MEM;
+    }
+
+    head->value = newvalue;
+    head->next = NULL;
+    list->head = head;
+    list->size++;
+  } else if (list->tail == NULL) {
+    struct node *tail;
+    tail = (struct node *) malloc(sizeof(struct node));
+
+    if (tail == NULL) {
+      return NO_MEM;
+    }
+
+    tail->value = newvalue;
+    tail->next = NULL;
+    list->head->next = tail;
+    list->size++;
+  } else {
+    struct node *tail = list->tail;
+    struct node *newtail;
+
+    newtail = (struct node *) malloc(sizeof(struct node));
+
+    if (newtail == NULL) {
+      return NO_MEM;
+    }
+
+    newtail->value = newvalue;
+    newtail->next = NULL;
+    tail->next = newtail;
+    list->tail = newtail;
+    list->size++;
+  }
+
+  return 0;
+  }
+}
+
+int
+add_head (struct DoublyLinkedList *list, void *newvalue) 
+{
+  if (list->head == NULL) {
+    struct node *newhead;
+    newhead = (struct node *) malloc(sizeof(struct node));
+
+    if (newhead == NULL) {
+      return NO_MEM;
+    }
+
+    newhead->value = newvalue;
+    newhead->next = NULL;
+    list->head = newhead;
+    list->size++;
+  } else {
+    struct node *head = list->head;
+    struct node *newhead;
+
+    newhead = (struct node *) malloc(sizeof(struct node));
+
+    if (newhead == NULL) {
+      return NO_MEM;
+    }
+
+    newhead->value = newvalue;
+    newhead->next = head->next;
+    list->head = newhead;
+    list->size++;
+  }
+
+  return 0;
+  }
+}
