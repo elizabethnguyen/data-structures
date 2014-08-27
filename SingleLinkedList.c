@@ -1,4 +1,8 @@
-#define NOMEM = 1;
+#include <stdio.h>
+#include <stdlib.h>
+#include "SingleLinkedList.h"
+#define NOMEM = 1
+#define SUCCESS = 0
 
 /* SinglyLinkedList: container for node 
    UNIDIRECTIONAL linked list: will store the head of the list
@@ -12,11 +16,11 @@ slAddLast (struct SinglyLinkedList *list, void *newValue)
   if (list->head == NULL) {
     struct slNode *head;
     head = (struct slNode *) malloc(sizeof(struct slNode));
-
+    
     if (head == NULL) {
       return NOMEM;
     }
-
+    
     head->value = newValue;
     head->next = NULL;
     list->head = head;
@@ -26,20 +30,20 @@ slAddLast (struct SinglyLinkedList *list, void *newValue)
     while (node->next != NULL) {
       node = node->next;
     }
-
+    
     struct slNode *tail;
     tail = (struct slNode *) malloc(sizeof(struct slNode));
-
+    
     if (tail == NULL) {
       return NOMEM;
     }
-
+    
     tail->value = newValue;
     tail->next = NULL;
     node->next = tail;
     list->size++;
   }
-  return 0;
+  return SUCCESS;
 }
 
 void
@@ -75,7 +79,7 @@ slAddFirst (struct SinglyLinkedList *list, void *newValue)
     list->size++;
   }
 
-  return 0;
+  return SUCCESS;
 }
 
 void
@@ -107,10 +111,5 @@ slDelete (struct SinglyLinkedList *list, struct slNode *node)
   free(nodeToRemove);
   list->size--;
   return;
-}
-
-/* No idea about this yet ... */
-struct slNode *
-compareTo (struct SinglyLinkedList *list, int(*compareFunc)(const void *, const void *)) {
 }
 
