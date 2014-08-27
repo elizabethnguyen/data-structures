@@ -2,7 +2,7 @@
 /* linkedlist.c 
    Elizabeth Nguyen */
 
-#define NO_MEM = 12;
+#define NO_MEM = 1;
 
 /* SinglyLinkedList: container for node 
    UNIDIRECTIONAL linked list: will store the head of the list
@@ -12,22 +12,26 @@
 
 
 struct SinglyLinkedList {
-  struct node *head;
+  struct sl_node *head;
   int size = 0;
+
+  int (*add_first)(struct SinglyLinkedList *list, void *value);
+  int (*add_last)(struct SinglyLinkedList *list, void *value);
+  int (*delete)(struct SinglyLinkedList *list, struct sl_node *node);
 };
 
 
-struct node {
+struct sl_node {
   void *value;
-  struct node *next;
+  struct sl_node *next;
 };
 
 int
-add_tail (struct SinglyLinkedList *list, void *newvalue)
+sl_add_last (struct SinglyLinkedList *list, void *newvalue)
 {
   if (list->head == NULL) {
-    struct node *head;
-    head = (struct node *) malloc(sizeof(struct node));
+    struct sl_node *head;
+    head = (struct sl_node *) malloc(sizeof(struct sl_node));
 
     if (head == NULL) {
       return NO_MEM;
@@ -38,14 +42,13 @@ add_tail (struct SinglyLinkedList *list, void *newvalue)
     list->head = head;
     list->size++;
   } else {
-    struct node *node = list->head;
-    
+    struct sl_node *node = list->head; 
     while (node->next != NULL) {
       node = node->next;
     }
 
-    struct node *tail;
-    tail = (struct node *) malloc(sizeof(struct node));
+    struct sl_node *tail;
+    tail = (struct sl_node *) malloc(sizeof(struct sl_node));
 
     if (tail == NULL) {
       return NO_MEM;
@@ -56,17 +59,20 @@ add_tail (struct SinglyLinkedList *list, void *newvalue)
     node->next = tail;
     list->size++;
   }
-
   return 0;
+}
 
+void
+init_sl (struct SinglyLinkedList *list)
+{
 }
 
 int
-add_head (struct SinglyLinkedList *list, void *newvalue)
+sl_add_first (struct SinglyLinkedList *list, void *newvalue)
 {
   if (list->head == NULL) {
-    struct node *root;
-    root = (struct node *) malloc(sizeof(struct node));
+    struct sl_node *root;
+    root = (struct sl_node *) malloc(sizeof(struct sl_node));
 
     if (root == NULL) {
       return NO_MEM;
@@ -77,9 +83,8 @@ add_head (struct SinglyLinkedList *list, void *newvalue)
     list->head = root;
     list->size++;
   } else {
-    struct node *head;
-    head = (struct node *) malloc(sizeof(struct node));
-
+    struct sl_node *head;
+    head = (struct sl_node *) malloc(sizeof(struct sl_node));
     if (head == NULL) {
       return NO_MEM;
     }
@@ -95,9 +100,9 @@ add_head (struct SinglyLinkedList *list, void *newvalue)
 }
 
 void
-delete_node (struct SinglyLinkedList *list, struct node *node)
+sl_delete (struct SinglyLinkedList *list, struct sl_node *node)
 {
-  struct node *temp;
+  struct sl_node *temp;
 
   if (list->size == 1) {
     free(list);
@@ -126,31 +131,40 @@ delete_node (struct SinglyLinkedList *list, struct node *node)
 }
 
 /* No idea what to do for this ... */
-struct node *
+struct sl_node *
 compareTo (struct SinglyLinkedList *list, int(*compareFunc)(const void *, const void *)) {
 }
 
-/* Not yet worked on! */
+/* DOUBLYLINKEDLIST */
 struct DoublyLinkedList
 {
-  struct node *head;
-  struct node *tail;
+  struct dl_node *head;
+  struct dl_node *tail;
   int size = 0;
+
+  int (*add_first)(struct DoublyLinkedList *list, void *value); 
+  int (*add_last)(struct DoublyLinkedList *list, void *value);
+  int (*delete)(struct DoublyLinkedList *list, struct dl_node *node);
 };
 
-struct node
+struct dl_node
 {
   void * value;
-  struct node *prev;
-  struct node *next;
+  struct dl_node *prev;
+  struct dl_node *next;
 };
 
+void
+init_dl (struct DoublyLinkedList *list)
+{
+}
+
 int
-add_tail (struct DoublyLinkedList *list, void *newvalue) 
+dl_add_last (struct DoublyLinkedList *list, void *newvalue) 
 {
   if (list->head == NULL) {
-    struct node *head;
-    head = (struct node *) malloc(sizeof(struct node));
+    struct dl_node *head;
+    head = (struct dl_node *) malloc(sizeof(struct dl_node));
 
     if (head == NULL) {
       return NO_MEM;
@@ -161,8 +175,8 @@ add_tail (struct DoublyLinkedList *list, void *newvalue)
     list->head = head;
     list->size++;
   } else if (list->tail == NULL) {
-    struct node *tail;
-    tail = (struct node *) malloc(sizeof(struct node));
+    struct dl_node *tail;
+    tail = (struct dl_node *) malloc(sizeof(struct dl_node));
 
     if (tail == NULL) {
       return NO_MEM;
@@ -173,10 +187,10 @@ add_tail (struct DoublyLinkedList *list, void *newvalue)
     list->head->next = tail;
     list->size++;
   } else {
-    struct node *tail = list->tail;
-    struct node *newtail;
+    struct dl_node *tail = list->tail;
+    struct dl_node *newtail;
 
-    newtail = (struct node *) malloc(sizeof(struct node));
+    newtail = (struct dl_node *) malloc(sizeof(struct dl_node));
 
     if (newtail == NULL) {
       return NO_MEM;
@@ -194,11 +208,11 @@ add_tail (struct DoublyLinkedList *list, void *newvalue)
 }
 
 int
-add_head (struct DoublyLinkedList *list, void *newvalue) 
+dl_add_first (struct DoublyLinkedList *list, void *newvalue) 
 {
   if (list->head == NULL) {
-    struct node *newhead;
-    newhead = (struct node *) malloc(sizeof(struct node));
+    struct dl_node *newhead;
+    newhead = (struct dl_node *) malloc(sizeof(struct dl_node));
 
     if (newhead == NULL) {
       return NO_MEM;
@@ -209,10 +223,10 @@ add_head (struct DoublyLinkedList *list, void *newvalue)
     list->head = newhead;
     list->size++;
   } else {
-    struct node *head = list->head;
-    struct node *newhead;
+    struct dl_node *head = list->head;
+    struct dl_node *newhead;
 
-    newhead = (struct node *) malloc(sizeof(struct node));
+    newhead = (struct dl_node *) malloc(sizeof(struct dl_node));
 
     if (newhead == NULL) {
       return NO_MEM;
@@ -226,4 +240,35 @@ add_head (struct DoublyLinkedList *list, void *newvalue)
 
   return 0;
   }
+}
+
+void
+dl_delete (struct DoublyLinkedList *list, struct dl_node *node)
+{
+  struct dl_node *temp;
+
+  if (list->size == 1) {
+    free(list);
+    return;
+  } 
+  
+  if (list->head == node) {
+    nodeToRemove = list->head;
+    list->head = list->head->next;
+  } else {
+    node = list->head;
+    while (node->next != node) {
+      node = node->next;
+    }
+    nodeToRemove = node->next;
+    if (nodeToRemove->next == NULL) {
+      node->next = NULL;
+    } else {
+      node->next = nodeToRemove->next;
+    }    
+  }
+
+  free(nodeToRemove);
+  list->size--;
+  return;
 }
