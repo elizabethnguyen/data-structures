@@ -8,7 +8,7 @@ struct SinglyLinkedList {
   int size;
   int (*addFirst)(struct SinglyLinkedList *list, void *value);
   int (*addLast)(struct SinglyLinkedList *list, void *value);
-  int (*delete)(struct SinglyLinkedList *list, struct sl_node *node);
+  int (*delete)(struct SinglyLinkedList *list, struct slNode *node);
 };
 
 void initSL (struct SinglyLinkedList *list);

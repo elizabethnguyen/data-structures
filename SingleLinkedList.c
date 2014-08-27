@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "SingleLinkedList.h"
-#define NOMEM = 1
-#define SUCCESS = 0
+#define NOMEM 1
+#define SUCCESS 0
 
 /* SinglyLinkedList: container for node 
    UNIDIRECTIONAL linked list: will store the head of the list

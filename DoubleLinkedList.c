@@ -1,13 +1,17 @@
-#define NOMEM = 1;
+#include <stdio.h>
+#include <stdlib.h>
+#include "DoubleLinkedList.h"
+#define NOMEM 1
+#define SUCCESS 0
 
 /* DOUBLYLINKEDLIST */
 void
-initDl (struct DoublyLinkedList *list)
+initDl (struct DoubleLinkedList *list)
 {
 }
 
 int
-dlAddLast (struct DoublyLinkedList *list, void *newValue) 
+dlAddLast (struct DoubleLinkedList *list, void *newValue) 
 {
   if (list->head == NULL) {
     struct dlNode *head;
@@ -55,11 +59,11 @@ dlAddLast (struct DoublyLinkedList *list, void *newValue)
 
 
 int
-dlAddFirst (struct DoublyLinkedList *list, void *newValue) 
+dlAddFirst (struct DoubleLinkedList *list, void *newValue) 
 {
   if (list->head == NULL) {
     struct dlNode *newHead;
-    newhead = (struct dlNode *) malloc(sizeof(struct dlNode));
+    newHead = (struct dlNode *) malloc(sizeof(struct dlNode));
 
     if (newHead == NULL) {
       return NOMEM;
@@ -73,7 +77,7 @@ dlAddFirst (struct DoublyLinkedList *list, void *newValue)
     struct dlNode *head = list->head;
     struct dlNode *newHead;
 
-    newhead = (struct dlNode *) malloc(sizeof(struct dlNode));
+    newHead = (struct dlNode *) malloc(sizeof(struct dlNode));
 
     if (newHead == NULL) {
       return NOMEM;
@@ -89,9 +93,9 @@ dlAddFirst (struct DoublyLinkedList *list, void *newValue)
 }
 
 void
-dlDelete (struct DoublyLinkedList *list, struct dlNode *node)
+dlDelete (struct DoubleLinkedList *list, struct dlNode *node)
 {
-  struct dlNode *temp;
+  struct dlNode *nodeToRemove;
 
   if (list->size == 1) {
     free(list);
