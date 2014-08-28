@@ -19,4 +19,4 @@ struct DoubleLinkedList
 void initDL (struct DoubleLinkedList *list);
 int dlAddFirst (struct DoubleLinkedList *list, void *newValue);
 int dlAddLast (struct DoubleLinkedList *list, void *newValue);
-void dlDelete (struct DoubleLinkedList *list, struct dlNode *node);
+int dlDelete (struct DoubleLinkedList *list, struct dlNode *node);

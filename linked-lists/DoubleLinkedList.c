@@ -1,124 +1,117 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "DoubleLinkedList.h"
-#define NOMEM 1
 #define SUCCESS 0
+#define NOMEM 1
+#define NONODE 2
 
 /* DOUBLYLINKEDLIST */
 void
 initDl (struct DoubleLinkedList *list)
 {
+  list->head = NULL;
+  list->tail = NULL;
+  list->size = 0;
+  list->addFirst = &dlAddFirst;
+  list->addLast = &dlAddLast;
+  list->delete = &dlDelete;
 }
 
 int
-dlAddLast (struct DoubleLinkedList *list, void *newValue) 
+dlAddLast (struct DoubleLinkedList *list, void *value) 
 {
-  if (list->head == NULL) {
-    struct dlNode *head;
-    head = (struct dlNode *) malloc(sizeof(struct dlNode));
+  struct dlNode *newNode;
+  struct dlNode *position;
 
-    if (head == NULL) {
-      return NOMEM;
-    }
+  newNode = (struct dlNode *) malloc(sizeof(struct dlNode));
 
-    head->value = newValue;
-    head->next = NULL;
-    list->head = head;
-    list->size++;
-  } else if (list->tail == NULL) {
-    struct dlNode *tail;
-    tail = (struct dlNode *) malloc(sizeof(struct dlNode));
-
-    if (tail == NULL) {
-      return NOMEM;
-    }
-
-    tail->value = newValue;
-    tail->next = NULL;
-    list->head->next = tail;
-    list->size++;
-  } else {
-    struct dlNode *tail = list->tail;
-    struct dlNode *newTail;
-
-    newTail = (struct dlNode *) malloc(sizeof(struct dlNode));
-
-    if (newTail == NULL) {
-      return NOMEM;
-    }
-
-    newTail->value = newValue;
-    newTail->next = NULL;
-    tail->next = newTail;
-    list->tail = newTail;
-    list->size++;
+  if (newNode == NULL) {
+    return NOMEM;
   }
+  
+  if (list->head != NULL) {
+    position = list->head;
 
-  return 0;
+    while (position->next != NULL) {
+      position = position->next;
+    }
+    position->next = newNode;
+    list->tail = newNode;
+  } else {
+    list->head = newNode;
+  }
+  newNode->value = value;
+  newNode->next = NULL;
+  list->size++;
+
+  return SUCCESS;
 }
 
 
 int
-dlAddFirst (struct DoubleLinkedList *list, void *newValue) 
+dlAddFirst (struct DoubleLinkedList *list, void *value) 
 {
-  if (list->head == NULL) {
-    struct dlNode *newHead;
-    newHead = (struct dlNode *) malloc(sizeof(struct dlNode));
+  struct dlNode *newNode;
+  newNode = (struct dlNode *) malloc(sizeof(struct dlNode));
 
-    if (newHead == NULL) {
-      return NOMEM;
-    }
-
-    newHead->value = newValue;
-    newHead->next = NULL;
-    list->head = newHead;
-    list->size++;
-  } else {
-    struct dlNode *head = list->head;
-    struct dlNode *newHead;
-
-    newHead = (struct dlNode *) malloc(sizeof(struct dlNode));
-
-    if (newHead == NULL) {
-      return NOMEM;
-    }
-
-    newHead->value = newValue;
-    newHead->next = head->next;
-    list->head = newHead;
-    list->size++;
+  if (newNode == NULL) {
+    return NOMEM;
   }
 
-  return 0;
+  if (list->head != NULL) {
+    newNode->next = list->head;
+    list->head = newNode;
+  } else {
+    list->head = newNode;
+    newNode->next = NULL;
+  }
+  newNode->value = value;
+  list->size++;
+
+  return SUCCESS;
 }
 
-void
-dlDelete (struct DoubleLinkedList *list, struct dlNode *node)
+int
+dlDelete (struct DoubleLinkedList *list, struct dlNode *nodeToRemove)
 {
-  struct dlNode *nodeToRemove;
+  struct dlNode *placeholderNode;
+  struct dlNode *position;
 
   if (list->size == 1) {
     free(list);
-    return;
-  } 
-  
-  if (list->head == node) {
-    nodeToRemove = list->head;
-    list->head = list->head->next;
-  } else {
-    node = list->head;
-    while (node->next != node) {
-      node = node->next;
-    }
-    nodeToRemove = node->next;
-    if (nodeToRemove->next == NULL) {
-      node->next = NULL;
-    } else {
-      node->next = nodeToRemove->next;
-    }    
+    return SUCCESS;
   }
 
-  free(nodeToRemove);
+  position = list->head;
+  
+  if (nodeToRemove == position) {
+    if (list->head->next == list->tail) {
+      list->tail = NULL;
+    }
+    list->head = list->head->next;
+    free(position);
+    list->size--;
+    return SUCCESS;
+  }
+
+  while (nodeToRemove != position->next) {
+    position = position->next;
+    if (position == NULL) {
+      return NONODE;
+    }
+  }
+
+  placeholderNode = position->next;
+
+  if (placeholderNode->next == NULL) {
+    position->next = NULL;
+    list->tail = position;
+  } else {
+    position->next = placeholderNode->next;
+  }
+
+  free(placeholderNode);
   list->size--;
-  return;
+  return SUCCESS;
+
 }
